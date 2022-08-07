@@ -8,4 +8,10 @@ This software features anti-debugging, anti-injection, anti-tamper, spoofed expo
 
 -The solution to this is to use my ModifyExportsName project code and write over that bad export's name. We are then left with one single export named "EncryptedFunction" @1 , at RVA 0x3680. This is likely the anticheat dispatch function similar to hackshield, which is one export function being used to initialize, send packets, etc with a flag as the parameter acting as an opcode.
 
-We must delete Ordinal2 @ AGN9.DLL + 0xBEFA98, the junk ordinal name starts with bytes "28 65 C3 86 62 C3 A8", we should attempt to edit this .DLL and remove traces of this export... stay tuned
+We must delete Ordinal2 @ AGN9.DLL + 0xBEFA94, the junk ordinal name starts with bytes "28 65 C3 86 62 C3 A8", we should attempt to edit this .DLL and remove traces of this export... stay tuned
+
+#Entrypoint
+x64dbg lists entrypoint at +C01250 which is likely spoofed, we get the instruction call 0x00007FFA8914651D which leads to packed code.
+
+#Sections
+Section sizes are spoofed to be 0 , and some extra sections have been added: ".[9", ".&[", ".i&J" with sizes 0, 0xe00, and 0xda3200.
