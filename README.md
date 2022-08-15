@@ -15,3 +15,10 @@ x64dbg lists entrypoint at +C01250 which is likely spoofed, we get the instructi
 
 #Sections
 Section sizes are spoofed to be 0 , and some extra sections have been added: ".[9", ".&[", ".i&J" with sizes 0, 0xe00, and 0xda3200.
+
+
+#Dumping process
+We can dump whatever process its trying to protect by using a kernel mode driver to read and write memory. For this example we are looking at the game Aero Tales The New World. I've built a small driver controller which can dump any .exe, soon we will check if it can successfully dump the entire .sys or .dll of the anticheat. After dumping the AGN9.dll module we can't inspect it with IDA as it'll say invalid PE format, in this case there was a 1 byte difference in size in the PE header which is fixed with any binary file editor. Then upon loading into IDA, we get: "Number of exported names 1962891300 is incorrect, maximum possible value is 533. Do you want to continue with the new value?". We then get "The input file contains non-empty TLS (Thread Local Storage) callback table.
+However, IDA could not find the TLS callback procedures in the loaded code.
+Please reload the input file manually and load all segments.", along with "Corrupt fixup table", "Some relocations are not applied". It appears this dump is packed, so we should probably find a way to unpack it.
+
